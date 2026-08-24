@@ -1,0 +1,90 @@
+name: Test plugins
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PROTO_LOG: debug
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      count: ${{ steps.plan.outputs.count }}
+    steps:
+      - uses: actions/checkout@v7
+      # Also doubles as a lint pass: the script fails on malformed TOML or a
+      # plugin with no [platform.*] sections, before we spend any runner time.
+      - id: plan
+        run: python3 ./scripts/plan-install-matrix.py >> "$GITHUB_OUTPUT"
+
+  install:
+    name: ${{ matrix.tool }} (${{ matrix.os }}/${{ matrix.arch }})
+    needs: plan
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: moonrepo/setup-toolchain@v0
+        with:
+          proto-version: latest
+          # A warm ~/.proto would restore an already-installed tool and make
+          # the install a no-op, so every job starts from nothing.
+          cache: false
+
+      - name: Pin the local plugin
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: proto plugin add "$TOOL" "file://./tools/$TOOL.toml"
+
+      - name: Install
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: proto install "$TOOL"
+
+      # `proto install` only warns when it cannot find the binary it just
+      # unpacked, so a bad archive-prefix/exe-path still "succeeds". `proto bin`
+      # hard-errors with MissingToolExecutable, which is the real assertion.
+      - name: Locate the executable
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: |
+          exe=$(proto bin "$TOOL")
+          echo "Resolved to: $exe"
+          test -f "$exe"
+
+  results:
+    name: Results
+    needs:
+      - plan
+      - install
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check install results
+        run: |
+          echo "Planned ${{ needs.plan.outputs.count }} install jobs."
+
+          if [ "${{ needs.install.result }}" != "success" ]; then
+            echo "::error::One or more plugins failed to install."
+            exit 1
+          fi
+
+          echo "All plugins installed and resolved an executable."

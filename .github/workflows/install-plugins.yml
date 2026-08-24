@@ -1,0 +1,58 @@
+name: Install plugins
+
+# Shared by `test-plugins.yml` (every plugin) and `test-changed-plugins.yml`
+# (only what a pull request touched). Both build the matrix with
+# `scripts/plan-install-matrix.py` and hand it over as JSON.
+on:
+  workflow_call:
+    inputs:
+      matrix:
+        description: "Job matrix as JSON, from scripts/plan-install-matrix.py"
+        required: true
+        type: string
+
+# A called workflow does not inherit the caller's `env`, so this lives here.
+env:
+  PROTO_LOG: debug
+
+jobs:
+  install:
+    name: ${{ matrix.tool }} (${{ matrix.os }}/${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(inputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: moonrepo/setup-toolchain@v0
+        with:
+          proto-version: latest
+          # A warm ~/.proto would restore an already-installed tool and make
+          # the install a no-op, so every job starts from nothing.
+          cache: false
+
+      - name: Pin the local plugin
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: proto plugin add "$TOOL" "file://./tools/$TOOL.toml"
+
+      - name: Install
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: proto install "$TOOL"
+
+      # `proto install` only warns when it cannot find the binary it just
+      # unpacked, so a bad archive-prefix/exe-path still "succeeds". `proto bin`
+      # hard-errors with MissingToolExecutable, which is the real assertion.
+      - name: Locate the executable
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: |
+          exe=$(proto bin "$TOOL")
+          echo "Resolved to: $exe"
+          test -f "$exe"

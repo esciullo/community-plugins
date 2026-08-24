@@ -1,0 +1,22 @@
+name = "Ninja"
+type = "cli"
+
+[plugin]
+description = "A small build system with a focus on speed."
+homepage-url = "https://ninja-build.org/"
+repository-url = "https://github.com/ninja-build/ninja"
+
+[resolve]
+git-url = "https://github.com/ninja-build/ninja"
+
+[platform.linux]
+download-file = "ninja-linux.zip"
+
+[platform.macos]
+download-file = "ninja-mac.zip"
+
+[platform.windows]
+download-file = "ninja-win.zip"
+
+[install]
+download-url = "https://github.com/ninja-build/ninja/releases/download/v{version}/{download_file}"

@@ -1,0 +1,31 @@
+name = "Dagger"
+type = "cli"
+
+[plugin]
+description = "Powerful, programmable open source CI/CD engine that runs your pipelines in containers."
+homepage-url = "https://dagger.io/"
+repository-url = "https://github.com/dagger/dagger"
+
+[resolve]
+git-url = "https://github.com/dagger/dagger"
+version-pattern = "^v((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+))"
+
+[platform.linux]
+download-file = "dagger_v{version}_linux_{arch}.tar.gz"
+checksum-file = "checksums.txt"
+
+[platform.macos]
+download-file = "dagger_v{version}_darwin_{arch}.tar.gz"
+checksum-file = "checksums.txt"
+
+[platform.windows]
+download-file = "dagger_v{version}_windows_{arch}.zip"
+checksum-file = "checksums.txt"
+
+[install]
+download-url = "https://github.com/dagger/dagger/releases/download/v{version}/{download_file}"
+checksum-url = "https://github.com/dagger/dagger/releases/download/v{version}/{checksum_file}"
+
+[install.arch]
+aarch64 = "arm64"
+x86_64 = "amd64"

@@ -10,13 +10,24 @@ repository-url = "https://github.com/ninja-build/ninja"
 git-url = "https://github.com/ninja-build/ninja"
 
 [platform.linux]
-download-file = "ninja-linux.zip"
+download-file = "ninja-linux{arch}.zip"
+archs = ["x86_64", "aarch64"]
+
+[platform.linux.arch]
+x86_64 = ""
+aarch64 = "-aarch64"
 
 [platform.macos]
 download-file = "ninja-mac.zip"
+archs = ["x86_64", "aarch64"]
 
 [platform.windows]
-download-file = "ninja-win.zip"
+download-file = "ninja-win{arch}.zip"
+archs = ["x86_64", "aarch64"]
+
+[platform.windows.arch]
+x86_64 = ""
+aarch64 = "arm64"
 
 [install]
 download-url = "https://github.com/ninja-build/ninja/releases/download/v{version}/{download_file}"

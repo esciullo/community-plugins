@@ -9,18 +9,39 @@ repository-url = "https://github.com/charmbracelet/gum"
 git-url = "https://github.com/charmbracelet/gum"
 
 [platform.linux]
+archs = ["x86", "x64", "arm", "arm64"]
 archive-prefix = "gum_{version}_Linux_{arch}"
 download-file = "gum_{version}_Linux_{arch}.tar.gz"
 checksum-file = "checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 archive-prefix = "gum_{version}_Darwin_{arch}"
 download-file = "gum_{version}_Darwin_{arch}.tar.gz"
 checksum-file = "checksums.txt"
 
 [platform.windows]
+archs = ["x86", "x64"]
 archive-prefix = "gum_{version}_Windows_{arch}"
 download-file = "gum_{version}_Windows_{arch}.zip"
+checksum-file = "checksums.txt"
+
+[platform.freebsd]
+archs = ["x86", "x64", "arm", "arm64"]
+archive-prefix = "gum_{version}_Freebsd_{arch}"
+download-file = "gum_{version}_Freebsd_{arch}.tar.gz"
+checksum-file = "checksums.txt"
+
+[platform.netbsd]
+archs = ["x86", "x64", "arm", "arm64"]
+archive-prefix = "gum_{version}_Netbsd_{arch}"
+download-file = "gum_{version}_Netbsd_{arch}.tar.gz"
+checksum-file = "checksums.txt"
+
+[platform.openbsd]
+archs = ["x86", "x64", "arm", "arm64"]
+archive-prefix = "gum_{version}_Openbsd_{arch}"
+download-file = "gum_{version}_Openbsd_{arch}.tar.gz"
 checksum-file = "checksums.txt"
 
 [install]

@@ -10,15 +10,23 @@ repository-url = "https://github.com/go-task/task"
 git-url = "https://github.com/go-task/task"
 
 [platform.linux]
+archs = ["x86", "x64", "arm", "arm64", "riscv64"]
 download-file = "task_linux_{arch}.tar.gz"
 checksum-file = "task_checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "task_darwin_{arch}.tar.gz"
 checksum-file = "task_checksums.txt"
 
 [platform.windows]
+archs = ["x86", "x64", "arm64"]
 download-file = "task_windows_{arch}.zip"
+checksum-file = "task_checksums.txt"
+
+[platform.freebsd]
+archs = ["x86", "x64", "arm", "arm64"]
+download-file = "task_freebsd_{arch}.tar.gz"
 checksum-file = "task_checksums.txt"
 
 [install]

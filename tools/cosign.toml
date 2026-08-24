@@ -9,22 +9,25 @@ repository-url = "https://github.com/sigstore/cosign"
 git-url = "https://github.com/sigstore/cosign"
 
 [platform.linux]
+archs = ["x64", "arm64", "arm", "powerpc64", "riscv64", "s390x"]
 download-file = "cosign-linux-{arch}"
 checksum-file = "cosign_checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "cosign-darwin-{arch}"
 checksum-file = "cosign_checksums.txt"
 
 [platform.windows]
+archs = ["x64"]
 download-file = "cosign-windows-{arch}.exe"
 checksum-file = "cosign_checksums.txt"
 
 [install]
 download-url = "https://github.com/sigstore/cosign/releases/download/v{version}/{download_file}"
 checksum-url = "https://github.com/sigstore/cosign/releases/download/v{version}/{checksum_file}"
-unpack = false
 
 [install.arch]
 aarch64 = "arm64"
 x86_64 = "amd64"
+powerpc64 = "ppc64le"

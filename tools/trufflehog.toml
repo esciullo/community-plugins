@@ -7,16 +7,20 @@ repository-url = "https://github.com/trufflesecurity/trufflehog"
 
 [resolve]
 git-url = "https://github.com/trufflesecurity/trufflehog"
+version-pattern = "^v((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+)(?<pre>-[0-9a-zA-Z\\.]+)?(?<build>\\+[-0-9a-zA-Z\\.]+)?)$"
 
 [platform.linux]
+archs = ["x64", "arm64"]
 download-file = "trufflehog_{version}_linux_{arch}.tar.gz"
 checksum-file = "trufflehog_{version}_checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "trufflehog_{version}_darwin_{arch}.tar.gz"
 checksum-file = "trufflehog_{version}_checksums.txt"
 
 [platform.windows]
+archs = ["x64", "arm64"]
 download-file = "trufflehog_{version}_windows_{arch}.tar.gz"
 checksum-file = "trufflehog_{version}_checksums.txt"
 

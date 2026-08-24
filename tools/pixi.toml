@@ -4,17 +4,32 @@ type = "cli"
 [plugin]
 repository-url = "https://github.com/prefix-dev/pixi"
 
+[metadata]
+self-upgrade-commands = ["self-update"]
+
 [resolve]
 git-url = "https://github.com/prefix-dev/pixi"
 
 [platform.linux]
-download-file = "pixi-{arch}-unknown-linux-musl.tar.gz"
+archs = ["x64", "arm64", "riscv64"]
+download-file = "pixi-{arch}.tar.gz"
+checksum-file = "pixi-{arch}.tar.gz.sha256"
+
+[platform.linux.arch]
+x64 = "x86_64-unknown-linux-musl"
+arm64 = "aarch64-unknown-linux-musl"
+riscv64 = "riscv64gc-unknown-linux-gnu"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "pixi-{arch}-apple-darwin.tar.gz"
+checksum-file = "pixi-{arch}-apple-darwin.tar.gz.sha256"
 
 [platform.windows]
+archs = ["x64", "arm64"]
 download-file = "pixi-{arch}-pc-windows-msvc.zip"
+checksum-file = "pixi-{arch}-pc-windows-msvc.zip.sha256"
 
 [install]
 download-url = "https://github.com/prefix-dev/pixi/releases/download/v{version}/{download_file}"
+checksum-url = "https://github.com/prefix-dev/pixi/releases/download/v{version}/{checksum_file}"

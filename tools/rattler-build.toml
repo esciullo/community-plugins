@@ -10,14 +10,20 @@ repository-url = "https://github.com/prefix-dev/rattler-build"
 git-url = "https://github.com/prefix-dev/rattler-build"
 
 [platform.linux]
+archs = ["x64", "arm64"]
 download-file = "rattler-build-{arch}-unknown-linux-musl"
+checksum-file = "sha256.sum"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "rattler-build-{arch}-apple-darwin"
+checksum-file = "sha256.sum"
 
 [platform.windows]
+archs = ["x64", "arm64"]
 download-file = "rattler-build-{arch}-pc-windows-msvc.exe"
+checksum-file = "sha256.sum"
 
 [install]
 download-url = "https://github.com/prefix-dev/rattler-build/releases/download/v{version}/{download_file}"
-unpack = false
+checksum-url = "https://github.com/prefix-dev/rattler-build/releases/download/v{version}/{checksum_file}"

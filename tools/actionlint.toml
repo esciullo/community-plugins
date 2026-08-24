@@ -9,15 +9,23 @@ repository-url = "https://github.com/rhysd/actionlint"
 git-url = "https://github.com/rhysd/actionlint"
 
 [platform.linux]
+archs = ["x86", "x64", "arm", "arm64"]
 download-file = "actionlint_{version}_linux_{arch}.tar.gz"
 checksum-file = "actionlint_{version}_checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "actionlint_{version}_darwin_{arch}.tar.gz"
 checksum-file = "actionlint_{version}_checksums.txt"
 
 [platform.windows]
+archs = ["x86", "x64", "arm64"]
 download-file = "actionlint_{version}_windows_{arch}.zip"
+checksum-file = "actionlint_{version}_checksums.txt"
+
+[platform.freebsd]
+archs = ["x86", "x64"]
+download-file = "actionlint_{version}_freebsd_{arch}.tar.gz"
 checksum-file = "actionlint_{version}_checksums.txt"
 
 [install]

@@ -10,14 +10,17 @@ repository-url = "https://github.com/gitleaks/gitleaks"
 git-url = "https://github.com/gitleaks/gitleaks"
 
 [platform.linux]
+archs = ["x86", "x64", "arm", "arm64"]
 download-file = "gitleaks_{version}_linux_{arch}.tar.gz"
 checksum-file = "gitleaks_{version}_checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "gitleaks_{version}_darwin_{arch}.tar.gz"
 checksum-file = "gitleaks_{version}_checksums.txt"
 
 [platform.windows]
+archs = ["x86", "x64", "arm64"]
 download-file = "gitleaks_{version}_windows_{arch}.zip"
 checksum-file = "gitleaks_{version}_checksums.txt"
 

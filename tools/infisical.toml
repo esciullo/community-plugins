@@ -11,15 +11,33 @@ git-url = "https://github.com/Infisical/infisical"
 version-pattern = "^infisical-cli/v((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+))"
 
 [platform.linux]
+archs = ["x86", "x64", "arm", "arm64"]
 download-file = "infisical_{version}_linux_{arch}.tar.gz"
 checksum-file = "checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "infisical_{version}_darwin_{arch}.tar.gz"
 checksum-file = "checksums.txt"
 
 [platform.windows]
+archs = ["x64", "arm", "arm64"]
 download-file = "infisical_{version}_windows_{arch}.zip"
+checksum-file = "checksums.txt"
+
+[platform.freebsd]
+archs = ["x64", "arm", "arm64"]
+download-file = "infisical_{version}_freebsd_{arch}.tar.gz"
+checksum-file = "checksums.txt"
+
+[platform.netbsd]
+archs = ["x86", "x64", "arm", "arm64"]
+download-file = "infisical_{version}_netbsd_{arch}.tar.gz"
+checksum-file = "checksums.txt"
+
+[platform.openbsd]
+archs = ["x86", "x64", "arm", "arm64"]
+download-file = "infisical_{version}_openbsd_{arch}.tar.gz"
 checksum-file = "checksums.txt"
 
 [install]

@@ -8,20 +8,22 @@ repository-url = "https://github.com/biomejs/biome"
 
 [resolve]
 git-url = "https://github.com/biomejs/biome/"
-version-pattern = "^cli/v((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+)(?<pre>-[^+]+)?)"
+version-pattern = "^@biomejs/biome@((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+)(?<pre>-[0-9a-zA-Z\\.]+)?)$"
 
 [platform.linux]
 download-file = "biome-linux-{arch}{libc}"
+archs = ["x64", "arm64"]
 
 [platform.macos]
 download-file = "biome-darwin-{arch}"
+archs = ["x64", "arm64"]
 
 [platform.windows]
 download-file = "biome-win32-{arch}.exe"
+archs = ["x64", "arm64"]
 
 [install]
-download-url = "https://github.com/biomejs/biome/releases/download/cli/v{version}/{download_file}"
-unpack = false
+download-url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%40{version}/{download_file}"
 
 [install.arch]
 aarch64 = "arm64"

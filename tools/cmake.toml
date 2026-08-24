@@ -10,35 +10,41 @@ repository-url = "https://github.com/Kitware/CMake"
 git-url = "https://github.com/Kitware/CMake"
 
 [platform.linux]
+archs = ["x64", "arm64"]
 download-file = "cmake-{version}-linux-{arch}.tar.gz"
 checksum-file = "cmake-{version}-SHA-256.txt"
 archive-prefix = "cmake-{version}-linux-{arch}"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "cmake-{version}-macos-universal.tar.gz"
 checksum-file = "cmake-{version}-SHA-256.txt"
 archive-prefix = "cmake-{version}-macos-universal/CMake.app/Contents"
 
 [platform.windows]
+archs = ["x86", "x64", "arm64"]
 download-file = "cmake-{version}-windows-{arch}.zip"
 checksum-file = "cmake-{version}-SHA-256.txt"
 archive-prefix = "cmake-{version}-windows-{arch}"
+
+# Windows assets use i386/arm64, while Linux assets use the Rust arch names as-is
+[platform.windows.arch]
+x86 = "i386"
+arm64 = "arm64"
 
 [install]
 download-url = "https://github.com/Kitware/CMake/releases/download/v{version}/{download_file}"
 checksum-url = "https://github.com/Kitware/CMake/releases/download/v{version}/{checksum_file}"
 
-[install.arch]
-x86 = "i386"
-
-[install.primary]
+[install.exes.cmake]
 exe-path = "bin/cmake"
+primary = true
 
-[install.secondary.ccmake]
+[install.exes.ccmake]
 exe-path = "bin/ccmake"
 
-[install.secondary.cpack]
+[install.exes.cpack]
 exe-path = "bin/cpack"
 
-[install.secondary.ctest]
+[install.exes.ctest]
 exe-path = "bin/ctest"

@@ -8,21 +8,33 @@ repository-url = "https://github.com/oxc-project/oxc"
 
 [resolve]
 git-url = "https://github.com/oxc-project/oxc"
-version-pattern = "^oxlint_v((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+))"
+version-pattern = "^apps_v((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+))$"
+
+[platform.freebsd]
+archs = ["x64"]
+download-file = "oxlint-{arch}-unknown-freebsd.tar.gz"
+exe-path = "oxlint-{arch}-unknown-freebsd"
 
 [platform.linux]
-download-file = "oxlint-linux-{arch}-{libc}"
+archs = ["arm64", "riscv64", "x64"]
+download-file = "oxlint-{arch}-unknown-linux-{libc}.tar.gz"
+exe-path = "oxlint-{arch}-unknown-linux-{libc}"
+
+[platform.linux.arch]
+riscv64 = "riscv64gc"
 
 [platform.macos]
-download-file = "oxlint-darwin-{arch}"
+archs = ["arm64", "x64"]
+download-file = "oxlint-{arch}-apple-darwin.tar.gz"
+exe-path = "oxlint-{arch}-apple-darwin"
 
 [platform.windows]
-download-file = "oxlint-win32-{arch}.exe"
+archs = ["arm64", "x64", "x86"]
+download-file = "oxlint-{arch}-pc-windows-msvc.zip"
+exe-path = "oxlint-{arch}-pc-windows-msvc"
+
+[platform.windows.arch]
+x86 = "i686"
 
 [install]
-download-url = "https://github.com/oxc-project/oxc/releases/download/oxlint_v{version}/{download_file}"
-unpack = false
-
-[install.arch]
-aarch64 = "arm64"
-x86_64 = "x64"
+download-url = "https://github.com/oxc-project/oxc/releases/download/apps_v{version}/{download_file}"

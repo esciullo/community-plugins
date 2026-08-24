@@ -8,19 +8,25 @@ repository-url = "https://github.com/dagger/dagger"
 
 [resolve]
 git-url = "https://github.com/dagger/dagger"
-version-pattern = "^v((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+))"
+version-pattern = "^v((?<major>[0-9]+)\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+)(?<pre>-[0-9a-zA-Z\\.]+)?(?<build>\\+[-0-9a-zA-Z\\.]+)?)$"
 
 [platform.linux]
 download-file = "dagger_v{version}_linux_{arch}.tar.gz"
 checksum-file = "checksums.txt"
+archs = ["x64", "arm64", "arm"]
+
+[platform.linux.arch]
+arm = "armv7"
 
 [platform.macos]
 download-file = "dagger_v{version}_darwin_{arch}.tar.gz"
 checksum-file = "checksums.txt"
+archs = ["x64", "arm64"]
 
 [platform.windows]
 download-file = "dagger_v{version}_windows_{arch}.zip"
 checksum-file = "checksums.txt"
+archs = ["x64", "arm64"]
 
 [install]
 download-url = "https://github.com/dagger/dagger/releases/download/v{version}/{download_file}"

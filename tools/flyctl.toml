@@ -5,20 +5,26 @@ type = "cli"
 description = "A command-line interface for fly.io."
 repository-url = "https://github.com/superfly/flyctl"
 
+[metadata]
+self-upgrade-commands = ["version upgrade", "version update"]
+
 [resolve]
 git-url = "https://github.com/superfly/flyctl"
 # they use yyyy.mm.dd versioning for prereleases and some ancient stable versions without downloads
 version-pattern = "^v((?<major>[0-9]{1,3})\\.(?<minor>[0-9]+)\\.(?<patch>[0-9]+)(?<pre>-[0-9a-zA-Z\\.]+)?(?<build>\\+[-0-9a-zA-Z\\.]+)?)$"
 
 [platform.linux]
+archs = ["x64", "arm64"]
 download-file = "flyctl_{version}_Linux_{arch}.tar.gz"
 checksum-file = "flyctl_{version}_checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "flyctl_{version}_macOS_{arch}.tar.gz"
 checksum-file = "flyctl_{version}_checksums.txt"
 
 [platform.windows]
+archs = ["x64", "arm64"]
 download-file = "flyctl_{version}_Windows_{arch}.zip"
 checksum-file = "flyctl_{version}_checksums.txt"
 
@@ -29,8 +35,9 @@ checksum-url = "https://github.com/superfly/flyctl/releases/download/v{version}/
 [install.arch]
 aarch64 = "arm64"
 
-[install.primary]
+[install.exes.flyctl]
 exe-path = "flyctl"
+primary = true
 
-[install.secondary.fly]
+[install.exes.fly]
 exe-path = "flyctl"

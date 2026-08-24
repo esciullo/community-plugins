@@ -22,7 +22,6 @@ download-file = "grain-win-{arch}.exe"
 
 [install]
 download-url = "https://github.com/grain-lang/grain/releases/download/grain-v{version}/{download_file}"
-unpack = false
 
 [install.arch]
 x86_64 = "x64"

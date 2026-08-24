@@ -10,15 +10,28 @@ repository-url = "https://github.com/traefik/traefik"
 git-url = "https://github.com/traefik/traefik"
 
 [platform.linux]
+archs = ["x86", "x64", "arm", "arm64", "powerpc64", "riscv64", "s390x"]
 download-file = "traefik_v{version}_linux_{arch}.tar.gz"
 checksum-file = "traefik_v{version}_checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "traefik_v{version}_darwin_{arch}.tar.gz"
 checksum-file = "traefik_v{version}_checksums.txt"
 
 [platform.windows]
+archs = ["x86", "x64", "arm64"]
 download-file = "traefik_v{version}_windows_{arch}.zip"
+checksum-file = "traefik_v{version}_checksums.txt"
+
+[platform.freebsd]
+archs = ["x86", "x64"]
+download-file = "traefik_v{version}_freebsd_{arch}.tar.gz"
+checksum-file = "traefik_v{version}_checksums.txt"
+
+[platform.openbsd]
+archs = ["x86", "x64", "riscv64"]
+download-file = "traefik_v{version}_openbsd_{arch}.tar.gz"
 checksum-file = "traefik_v{version}_checksums.txt"
 
 [install]
@@ -28,5 +41,6 @@ checksum-url = "https://github.com/traefik/traefik/releases/download/v{version}/
 [install.arch]
 arm = "armv6"
 aarch64 = "arm64"
+powerpc64 = "ppc64le"
 x86 = "386"
 x86_64 = "amd64"

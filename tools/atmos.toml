@@ -4,21 +4,30 @@ type = "cli"
 [plugin]
 repository-url = "https://github.com/cloudposse/atmos"
 
+[metadata]
+self-upgrade-commands = ["version install", "version uninstall"]
+
 [resolve]
 git-url = "https://github.com/cloudposse/atmos"
 
 [platform.linux]
+archs = ["x86", "x64", "arm", "arm64"]
 download-file = "atmos_{version}_{os}_{arch}"
+checksum-file = "atmos_{version}_SHA256SUMS"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "atmos_{version}_darwin_{arch}"
+checksum-file = "atmos_{version}_SHA256SUMS"
 
 [platform.windows]
+archs = ["x86", "x64", "arm64"]
 download-file = "atmos_{version}_{os}_{arch}.exe"
+checksum-file = "atmos_{version}_SHA256SUMS"
 
 [install]
 download-url = "https://github.com/cloudposse/atmos/releases/download/v{version}/{download_file}"
-checksum-url = "https://github.com/cloudposse/atmos/releases/download/v{version}/atmos_{version}_SHA256SUMS"
+checksum-url = "https://github.com/cloudposse/atmos/releases/download/v{version}/{checksum_file}"
 
 [install.arch]
 x86 = "386"

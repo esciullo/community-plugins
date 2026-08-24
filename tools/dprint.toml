@@ -13,19 +13,26 @@ self-upgrade-commands = ["upgrade"]
 git-url = "https://github.com/dprint/dprint"
 
 [platform.linux]
+archs = ["x64", "arm64", "longarm64", "powerpc64", "riscv64"]
 download-file = "dprint-{arch}-unknown-linux-{libc}.zip"
 checksum-file = "SHASUMS256.txt"
-bin-path = "dprint"
+exe-path = "dprint"
+
+[platform.linux.arch]
+powerpc64 = "powerpc64le"
+riscv64 = "riscv64gc"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "dprint-{arch}-apple-darwin.zip"
 checksum-file = "SHASUMS256.txt"
-bin-path = "dprint"
+exe-path = "dprint"
 
 [platform.windows]
+archs = ["x64", "arm64"]
 download-file = "dprint-{arch}-pc-windows-msvc.zip"
 checksum-file = "SHASUMS256.txt"
-bin-path = "dprint.exe"
+exe-path = "dprint.exe"
 
 [install]
 download-url = "https://github.com/dprint/dprint/releases/download/{version}/{download_file}"

@@ -10,14 +10,17 @@ repository-url = "https://github.com/OctopusDeploy/cli"
 git-url = "https://github.com/OctopusDeploy/cli"
 
 [platform.linux]
+archs = ["x64", "arm64"]
 download-file = "octopus_{version}_linux_{arch}.tar.gz"
 checksum-file = "octopus_{version}_SHA256SUMS"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "octopus_{version}_macOS_{arch}.tar.gz"
 checksum-file = "octopus_{version}_SHA256SUMS"
 
 [platform.windows]
+archs = ["x64", "arm64"]
 download-file = "octopus_{version}_windows_{arch}.zip"
 checksum-file = "octopus_{version}_SHA256SUMS"
 

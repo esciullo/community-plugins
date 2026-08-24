@@ -6,22 +6,38 @@ description = "Fast and extensible multi-platform HTTP/1-2-3 web server with aut
 homepage-url = "https://caddyserver.com/"
 repository-url = "https://github.com/caddyserver/caddy"
 
+[metadata]
+self-upgrade-commands = ["upgrade", "add-package", "remove-package"]
+
 [resolve]
 git-url = "https://github.com/caddyserver/caddy"
 
 [platform.linux]
+archs = ["x64", "arm", "arm64", "powerpc64", "riscv64", "s390x"]
 download-file = "caddy_{version}_linux_{arch}.tar.gz"
+checksum-file = "caddy_{version}_checksums.txt"
 
 [platform.macos]
+archs = ["x64", "arm64"]
 download-file = "caddy_{version}_mac_{arch}.tar.gz"
+checksum-file = "caddy_{version}_checksums.txt"
 
 [platform.windows]
+archs = ["x64", "arm64"]
 download-file = "caddy_{version}_windows_{arch}.zip"
+checksum-file = "caddy_{version}_checksums.txt"
+
+[platform.freebsd]
+archs = ["x64", "arm", "arm64"]
+download-file = "caddy_{version}_freebsd_{arch}.tar.gz"
+checksum-file = "caddy_{version}_checksums.txt"
 
 [install]
 download-url = "https://github.com/caddyserver/caddy/releases/download/v{version}/{download_file}"
+checksum-url = "https://github.com/caddyserver/caddy/releases/download/v{version}/{checksum_file}"
 
 [install.arch]
 arm = "armv6"
 aarch64 = "arm64"
+powerpc64 = "ppc64le"
 x86_64 = "amd64"

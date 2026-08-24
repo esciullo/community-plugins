@@ -1,0 +1,140 @@
+name: Test changed plugins
+
+on:
+  pull_request:
+    paths:
+      - "tools/*.toml"
+  workflow_dispatch:
+    inputs:
+      tools:
+        description: "Space separated plugin names to test (e.g. biome ruff)"
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PROTO_LOG: debug
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      count: ${{ steps.plan.outputs.count }}
+      tools: ${{ steps.changed.outputs.tools }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # Asking the API beats diffing locally: it needs no history, and it
+      # reports renames and deletions accurately.
+      - name: Collect changed plugins
+        id: changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_TOOLS: ${{ inputs.tools }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          if [ -n "$INPUT_TOOLS" ]; then
+            tools="$INPUT_TOOLS"
+          else
+            # A plugin deleted by this pull request has nothing left to install.
+            # Filtering in jq rather than grep keeps an empty result at exit 0,
+            # which matters because bash runs with pipefail here.
+            tools=$(
+              gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate \
+                --jq '.[] | select(.status != "removed") | .filename | select(test("^tools/[^/]+\\.toml$"))' \
+                | sed 's|^tools/||; s|\.toml$||' \
+                | sort -u \
+                | tr '\n' ' '
+            )
+          fi
+
+          echo "Changed plugins: ${tools:-(none)}"
+          echo "tools=$tools" >> "$GITHUB_OUTPUT"
+
+      - id: plan
+        env:
+          TOOLS: ${{ steps.changed.outputs.tools }}
+        run: |
+          if [ -z "$TOOLS" ]; then
+            echo "matrix=[]" >> "$GITHUB_OUTPUT"
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Unquoted on purpose: the plugin names are a space separated list.
+          python3 ./scripts/plan-install-matrix.py $TOOLS >> "$GITHUB_OUTPUT"
+
+  install:
+    name: ${{ matrix.tool }} (${{ matrix.os }}/${{ matrix.arch }})
+    needs: plan
+    if: needs.plan.outputs.count != '0'
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: moonrepo/setup-toolchain@v0
+        with:
+          proto-version: latest
+          # A warm ~/.proto would restore an already-installed tool and make
+          # the install a no-op, so every job starts from nothing.
+          cache: false
+
+      - name: Pin the local plugin
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: proto plugin add "$TOOL" "file://./tools/$TOOL.toml"
+
+      - name: Install
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: proto install "$TOOL"
+
+      # `proto install` only warns when it cannot find the binary it just
+      # unpacked, so a bad archive-prefix/exe-path still "succeeds". `proto bin`
+      # hard-errors with MissingToolExecutable, which is the real assertion.
+      - name: Locate the executable
+        shell: bash
+        env:
+          TOOL: ${{ matrix.tool }}
+        run: |
+          exe=$(proto bin "$TOOL")
+          echo "Resolved to: $exe"
+          test -f "$exe"
+
+  results:
+    name: Results
+    needs:
+      - plan
+      - install
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check install results
+        env:
+          TOOLS: ${{ needs.plan.outputs.tools }}
+          COUNT: ${{ needs.plan.outputs.count }}
+          RESULT: ${{ needs.install.result }}
+        run: |
+          if [ "$COUNT" = "0" ]; then
+            echo "No plugins changed, nothing to install."
+            exit 0
+          fi
+
+          echo "Planned $COUNT install jobs for:$TOOLS"
+
+          if [ "$RESULT" != "success" ]; then
+            echo "::error::One or more changed plugins failed to install."
+            exit 1
+          fi
+
+          echo "All changed plugins installed and resolved an executable."
